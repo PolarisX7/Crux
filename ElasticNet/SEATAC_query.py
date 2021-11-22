@@ -4,8 +4,8 @@ import pandas as pd
 
 pd.set_option("display.max_columns",None)
 
-year = 2021
-url='https://www.portseattle.org/page/rental-car-revenue-report-2018'
+year = 2020
+url=f'https://www.portseattle.org/page/rental-car-revenue-report-{year}'
 #Create a handle, page, to handle the contents of the website
 page = requests.get(url)
 #Store the contents of the website under doc
@@ -72,5 +72,7 @@ for _,row in df.iterrows():
     df.loc[_,'Month'] = tmp_mon
 
 df.Company = df.Company.apply(lambda x: x.replace(u'\xa0', u' '))
+df.RentalCarGrossSales = df.RentalCarGrossSales.apply(lambda x: str(x).replace('$',''))
+df.RentalCarGrossSales = df.RentalCarGrossSales.apply(lambda x: str(x).replace(u'\xa0', '0'))
 df.RentalCarGrossSales = df.RentalCarGrossSales.apply(lambda x: int(str(x).replace(',','')))
 df.to_csv(f'./data/rental{year}.csv')
